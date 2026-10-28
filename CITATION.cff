@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this benchmark, please cite it as below."
+title: "pl-forecast-bench: a leakage-checked forecasting benchmark for the Polish power system"
+type: software
+authors:
+  - family-names: "Waleszczyński"
+    given-names: "Konrad"
+version: "1.0.0"
+date-released: "2026-10-28"
+license: MIT
+repository-code: "https://github.com/kwwaleszczynski-del/pl-forecast-bench"
+url: "https://kwwaleszczynski-del.github.io/pl-forecast-bench/"
+abstract: >-
+  A benchmark of day-ahead and intraday (1-6 h) forecasts at 15-minute resolution for national wind generation,
+  solar generation, power demand and the SDAC day-ahead price in Poland. It fixes the data (PSE reports, archived
+  ECMWF IFS forecasts through Open-Meteo, with download scripts and checksums), the as-of rules (publication times
+  of every input), the train/validation/test splits with a 12-month test year, the metrics (MAE, RMSE, nMAE, pinball,
+  CRPS, imbalance cost, battery profit) and reference models, and ships tests that detect look-ahead leakage.
+keywords:
+  - forecasting
+  - benchmark
+  - wind power
+  - solar power
+  - electricity demand
+  - electricity price
+  - Poland
+  - time series foundation models

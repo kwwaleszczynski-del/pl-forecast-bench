@@ -1,0 +1,17 @@
+{
+  "title": "pl-forecast-bench: a leakage-checked forecasting benchmark for the Polish power system",
+  "upload_type": "software",
+  "description": "<p>A benchmark of day-ahead and intraday (1-6 h) forecasts at 15-minute resolution for national wind generation, solar generation, power demand and the SDAC day-ahead price in Poland.</p><p>It fixes the data (PSE reports and archived ECMWF IFS forecasts through Open-Meteo, as download scripts with checksums), the as-of rules (publication time of every input), train/validation/test splits with a 12-month test year (October 2025 to September 2026), the metrics (MAE, RMSE, nMAE, pinball loss, CRPS, imbalance cost under a simplified settlement, profit of a battery scheduled by a MILP) and reference models (naive, the official PSE plan, ridge, gradient boosting, zero-shot time series foundation models), with tests that detect look-ahead leakage and a leaderboard open to submissions.</p><p>The archive contains code, configuration, checksums and scores; the PSE and Open-Meteo data are not redistributed.</p>",
+  "creators": [
+    {"name": "Waleszczyński, Konrad"}
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "keywords": ["forecasting", "benchmark", "wind power", "solar power", "electricity demand", "electricity price", "Poland", "power system", "time series foundation models"],
+  "related_identifiers": [
+    {"identifier": "https://github.com/kwwaleszczynski-del/pl-forecast-bench", "relation": "isSupplementTo", "scheme": "url"},
+    {"identifier": "https://kwwaleszczynski-del.github.io/pl-forecast-bench/", "relation": "isDocumentedBy", "scheme": "url"},
+    {"identifier": "https://github.com/kwwaleszczynski-del/pse-opendata", "relation": "requires", "scheme": "url"}
+  ],
+  "language": "eng"
+}

@@ -1,0 +1,17 @@
+{
+ "name": "persistence",
+ "display_name": "Persistence",
+ "kind": "naive",
+ "inputs": [
+  "actuals"
+ ],
+ "description": "Latest public value held flat (price: last quarter-hour of D-1); quantiles from its errors of the previous 90 days by hour.",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/tree/main/src/plfb/baselines",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT"
+}

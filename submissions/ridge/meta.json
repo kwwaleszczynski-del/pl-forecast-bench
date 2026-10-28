@@ -1,0 +1,20 @@
+{
+ "name": "ridge",
+ "display_name": "Ridge regression",
+ "kind": "linear, NWP",
+ "inputs": [
+  "actuals",
+  "ECMWF IFS",
+  "calendar",
+  "PSE plan (intraday)"
+ ],
+ "description": "Ridge regression on NWP aggregates and per-point values, lags, calendar dummies; quantiles from its errors of the previous 90 days; quarterly refits.",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/tree/main/src/plfb/baselines",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT"
+}

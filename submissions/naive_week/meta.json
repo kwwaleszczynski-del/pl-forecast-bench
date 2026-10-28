@@ -1,0 +1,17 @@
+{
+ "name": "naive_week",
+ "display_name": "Seasonal naive, week",
+ "kind": "naive",
+ "inputs": [
+  "actuals"
+ ],
+ "description": "Same quarter-hour one week earlier.",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/tree/main/src/plfb/baselines",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT"
+}

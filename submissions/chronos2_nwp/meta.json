@@ -1,0 +1,18 @@
+{
+ "name": "chronos2_nwp",
+ "display_name": "Chronos-2 + NWP",
+ "inputs": [
+  "actuals",
+  "ECMWF IFS"
+ ],
+ "description": "amazon/chronos-2 (Apache-2.0), zero-shot with ECMWF IFS covariates (wind or PV index, temperature) as of the origin: past values from each day's previous-day run, future values from the newest public run.",
+ "kind": "foundation, zero-shot",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT (code); model weights Apache-2.0"
+}

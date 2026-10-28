@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PL Forecast Bench</title>
+<meta name="description" content="A citable, leakage-checked benchmark of day-ahead and intraday forecasts for the Polish power system: national wind, solar, demand and the day-ahead price, with fixed splits, metrics, reference models and a leaderboard.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 26h24' stroke='%2352514e' stroke-width='2'/%3E%3Crect x='6' y='14' width='5' height='12' rx='1' fill='%232a78d6'/%3E%3Crect x='14' y='8' width='5' height='18' rx='1' fill='%23eb6834'/%3E%3Crect x='22' y='18' width='5' height='8' rx='1' fill='%231baf7a'/%3E%3C/svg%3E">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --hover: rgba(11,11,11,0.04);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #8a5cd1; --s5: #c2477f; --ref: #52514e;
+  --good-text: #006300; --bad-text: #b42a2a; --chip: #f0efec;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --hover: rgba(255,255,255,0.05);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #9d74e0; --s5: #d4628f; --ref: #c3c2b7;
+    --good-text: #0ca30c; --bad-text: #e66767; --chip: #2c2c2a;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --hover: rgba(255,255,255,0.05);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #9d74e0; --s5: #d4628f; --ref: #c3c2b7;
+  --good-text: #0ca30c; --bad-text: #e66767; --chip: #2c2c2a;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 16px; }
+header { padding: 32px 0 8px; }
+h1 { font-size: 28px; line-height: 1.2; margin: 0 0 6px; font-weight: 650; letter-spacing: -0.01em; }
+h2 { font-size: 20px; margin: 0 0 4px; font-weight: 620; }
+h3 { font-size: 15px; margin: 0 0 8px; font-weight: 600; }
+p { margin: 0 0 10px; }
+a { color: var(--s1); }
+code { font: 13px ui-monospace, SFMono-Regular, Consolas, monospace; background: var(--chip); padding: 1px 4px; border-radius: 4px; }
+.lede { color: var(--ink-2); max-width: 820px; }
+.meta { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; }
+.meta a { color: inherit; }
+section { margin: 28px 0; }
+.sub { color: var(--ink-2); font-size: 14px; margin-bottom: 14px; max-width: 860px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.tile .label { color: var(--ink-2); font-size: 13px; }
+.tile .value { font-size: 24px; font-weight: 620; line-height: 1.2; margin: 4px 0 2px; }
+.tile .note { color: var(--muted); font-size: 12.5px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 4px 0 14px; }
+.tabgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.tabgroup .glabel { color: var(--muted); font-size: 13px; margin-right: 2px; }
+.tab { border: 1px solid var(--border); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 14px; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--page); border-color: var(--ink); }
+.tab:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+th { color: var(--ink-2); font-weight: 600; font-size: 13px; cursor: pointer; user-select: none; }
+th[aria-sort="ascending"]::after { content: " \25B2"; font-size: 10px; }
+th[aria-sort="descending"]::after { content: " \25BC"; font-size: 10px; }
+tbody tr:hover { background: var(--hover); }
+tr.unranked td { color: var(--ink-2); }
+.badge { display: inline-block; font-size: 11.5px; padding: 0 6px; border-radius: 999px; background: var(--chip); color: var(--ink-2); margin-left: 6px; vertical-align: 1px; }
+.pos { color: var(--good-text); }
+.neg { color: var(--bad-text); }
+.ci { color: var(--muted); font-size: 12px; }
+.kind { color: var(--muted); font-size: 12.5px; }
+.chart { width: 100%; height: auto; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+.legend span::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; background: var(--c); margin-right: 6px; vertical-align: 3px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 760px) {
+  .grid2 { grid-template-columns: 1fr; } h1 { font-size: 24px; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .tile .value { font-size: 16px; } .card.tile { padding: 10px 12px; }
+}
+.note { color: var(--muted); font-size: 13px; }
+ul.rules { margin: 0; padding-left: 20px; color: var(--ink-2); font-size: 14px; }
+ul.rules li { margin: 4px 0; }
+pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; overflow-x: auto; font: 13px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace; }
+footer { color: var(--muted); font-size: 13px; padding: 24px 0 40px; border-top: 1px solid var(--grid); margin-top: 32px; }
+#error { color: var(--bad-text); }
+.chartbox { position: relative; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; font-size: 12.5px; color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,0.12); white-space: nowrap; z-index: 2; }
+.tip .t { color: var(--muted); margin-bottom: 2px; }
+.tip .r::before { content: ""; display: inline-block; width: 10px; height: 3px; border-radius: 2px; background: var(--c); margin-right: 6px; vertical-align: 3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>PL Forecast Bench</h1>
+  <p class="lede">A benchmark of forecasts for the Polish power system: national wind and solar generation, demand and
+  the day-ahead price, day-ahead (issued before the SDAC gate closure) and intraday (1 to 6 hours ahead), at
+  15-minute resolution. Every model sees only what was public at the moment of the forecast. Test year:
+  <span id="period">October 2025 to September 2026</span>.</p>
+  <div class="meta">
+    <a href="https://github.com/kwwaleszczynski-del/pl-forecast-bench">Code, data scripts and submission guide</a>
+    <span id="generated"></span>
+    <a href="#cite">How to cite</a>
+  </div>
+</header>
+
+<p id="error" hidden></p>
+
+<section>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<section>
+  <h2>Leaderboard</h2>
+  <p class="sub" id="tasknote"></p>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="card tablewrap"><table id="board"><thead></thead><tbody></tbody></table></div>
+  <p class="note" id="legendnote">Ranked by MAE among models that respect the as-of rule. Skill = 1 - MAE / MAE of the
+  reference on the rows both have, with a 95% interval from a bootstrap over delivery days. Click a column to sort.</p>
+</section>
+
+<section class="grid2">
+  <div class="card">
+    <h3 id="chart1title">MAE by lead time</h3>
+    <div class="chartbox"><svg class="chart" id="chart1" viewBox="0 0 520 260" role="img" aria-label="MAE by lead time or hour of day"></svg><div class="tip" id="tip1" hidden></div></div>
+    <div class="legend" id="legend1"></div>
+  </div>
+  <div class="card">
+    <h3>MAE by month</h3>
+    <div class="chartbox"><svg class="chart" id="chart2" viewBox="0 0 520 260" role="img" aria-label="MAE by month"></svg><div class="tip" id="tip2" hidden></div></div>
+    <div class="legend" id="legend2"></div>
+  </div>
+</section>
+
+<section>
+  <h2>Rules</h2>
+  <ul class="rules">
+    <li><b>Day-ahead:</b> one forecast per delivery day D issued on D-1 at 10:00 Polish time, two hours before the
+      SDAC gate closure (12:00), for every quarter-hour of D.</li>
+    <li><b>Intraday:</b> a forecast at every full hour for the quarter-hours starting 1 to 6 hours later (20
+      intervals). No intraday price task: the day-ahead price of D is known on D-1.</li>
+    <li><b>As of the origin:</b> actual wind, PV and demand count as public 60 minutes after their interval ends; the
+      SDAC price and the PSE plan at the publication time PSE reports; a weather run of ECMWF IFS 7 hours after its
+      initialisation. Weather input is an archived forecast, never a reanalysis such as ERA5.</li>
+    <li><b>Splits:</b> train 21 Jun 2024 to 30 Jun 2025, validation Jul to Sep 2025, test Oct 2025 to Sep 2026.
+      Models may be refitted at any origin on data public at that origin; the reference models refit quarterly.</li>
+    <li><b>PSE plan day-ahead</b> is published on D-1 between 13:30 and 20:30, after the gate, so it has more
+      information than the rules allow. It is the reference for skill but is not ranked. Intraday it is as of the
+      origin and ranked.</li>
+    <li><b>Value metrics</b> use a simplified settlement and should not be read as a statement of the current market
+      rules, which have to be verified: imbalance cost = the forecast traded at the SDAC price, deviation settled at
+      the single imbalance price CEN; battery = 1 MW / 2 MWh MILP schedule on the forecast price, settled at the
+      actual price.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Submit</h2>
+  <p class="sub">Forecasts as CSV or Parquet with columns <code>track</code>, <code>variable</code>,
+  <code>origin_utc</code>, <code>target_utc</code>, <code>point</code> and optionally <code>q10</code> to
+  <code>q90</code>. Score them locally and open a pull request with the scores, a <code>meta.json</code> and a link to
+  the forecast file and the code:</p>
+<pre>plfb pse &amp;&amp; plfb nwp &amp;&amp; plfb build &amp;&amp; plfb verify
+plfb evaluate --forecast my_test.parquet --name my-model --meta meta.json --out submissions/my-model
+plfb leaderboard</pre>
+</section>
+
+<section id="cite">
+  <h2>Cite</h2>
+  <p class="sub" id="citation">Waleszczyński, K. (2026). pl-forecast-bench: a leakage-checked forecasting benchmark for
+  the Polish power system (version 1.0). <a href="https://github.com/kwwaleszczynski-del/pl-forecast-bench">github.com/kwwaleszczynski-del/pl-forecast-bench</a>.
+  See CITATION.cff in the repository for the archived version and DOI.</p>
+</section>
+
+<footer>
+  Data: information obtained from PSE S.A. (www.pse.pl, reports API api.raporty.pse.pl), processed; state as of
+  28 October 2026. Weather: <a href="https://open-meteo.com/">Open-Meteo.com</a> (CC BY 4.0), ECMWF IFS HRES (ECMWF
+  open data, CC BY 4.0). Installed capacity for nMAE: Forum Energii, URE and PSE figures as cited in the repository.
+  This is an independent project, not affiliated with PSE S.A. or ECMWF.
+</footer>
+</div>
+
+<script>
+"use strict";
+const TASKS = [
+  ["day_ahead/wind", "Wind", "Day-ahead"], ["day_ahead/pv", "Solar", "Day-ahead"],
+  ["day_ahead/demand", "Demand", "Day-ahead"], ["day_ahead/price", "Price", "Day-ahead"],
+  ["intraday/wind", "Wind", "Intraday 1-6 h"], ["intraday/pv", "Solar", "Intraday 1-6 h"],
+  ["intraday/demand", "Demand", "Intraday 1-6 h"],
+];
+const COLORS = ["--s1", "--s2", "--s3", "--s4", "--s5"];
+const fmt0 = new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 });
+const fmt1 = new Intl.NumberFormat("en-GB", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const fmt2 = new Intl.NumberFormat("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+let DATA = null, current = "day_ahead/wind", sortKey = null, sortDir = 1;
+
+function unit(task) { return task.endsWith("price") ? "PLN/MWh" : "MW"; }
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function pct(x, digits) { return (x >= 0 ? "+" : "−") + (digits === 1 ? fmt1 : fmt2).format(Math.abs(x * 100)) + "%"; }
+
+function columns(task) {
+  const isPrice = task.endsWith("price"), isDA = task.startsWith("day_ahead");
+  const u = unit(task);
+  const cols = [
+    { key: "rank", label: "#", fmt: e => e.rank ?? "–" },
+    { key: "name", label: "Model", fmt: e => esc(e.name) + (e.reference ? '<span class="badge">reference</span>' : "") +
+        (!e.as_of ? '<span class="badge">not as-of</span>' : "") + `<div class="kind">${esc(e.kind)}</div>` },
+    { key: "mae", label: `MAE (${u})`, fmt: e => isPrice ? fmt1.format(e.mae) : fmt0.format(e.mae) },
+    { key: "rmse", label: `RMSE (${u})`, fmt: e => isPrice ? fmt1.format(e.rmse) : fmt0.format(e.rmse) },
+    { key: "nmae", label: "nMAE", fmt: e => fmt2.format(e.nmae) + "%" },
+    { key: "skill", label: isPrice ? "Skill vs naive week" : "Skill vs PSE plan",
+      fmt: e => e.skill == null ? "–" : `<span class="${e.skill >= 0 ? "pos" : "neg"}">${pct(e.skill, 1)}</span>` +
+        (e.skill_ci ? ` <span class="ci">[${pct(e.skill_ci[0], 1)}, ${pct(e.skill_ci[1], 1)}]</span>` : "") },
+    { key: "crps", label: `CRPS (${u})`, fmt: e => e.crps == null ? "–" : (isPrice ? fmt1 : fmt0).format(e.crps) },
+    { key: "coverage80", label: "80% cover", fmt: e => e.coverage80 == null ? "–" : fmt1.format(e.coverage80) + "%" },
+  ];
+  if (isDA && !isPrice) cols.push({ key: "imbalance_cost_pln_mwh", label: "Imbalance cost (PLN/MWh)",
+    fmt: e => e.imbalance_cost_pln_mwh == null ? "–" : fmt1.format(e.imbalance_cost_pln_mwh) });
+  if (isPrice) cols.push({ key: "battery_share", label: "Battery, % of perfect",
+    fmt: e => e.battery_share == null ? "–" : fmt1.format(e.battery_share) + "%" },
+    { key: "battery_pln_mw_year", label: "PLN/MW/year", fmt: e => e.battery_pln_mw_year == null ? "–" : fmt0.format(e.battery_pln_mw_year) });
+  return cols;
+}
+
+function renderTabs() {
+  const tabs = document.getElementById("tabs");
+  tabs.innerHTML = "";
+  for (const group of ["Day-ahead", "Intraday 1-6 h"]) {
+    const g = document.createElement("div");
+    g.className = "tabgroup";
+    g.innerHTML = `<span class="glabel">${group}</span>`;
+    for (const [key, label, grp] of TASKS) {
+      if (grp !== group) continue;
+      const b = document.createElement("button");
+      b.className = "tab"; b.type = "button"; b.setAttribute("role", "tab");
+      b.setAttribute("aria-selected", String(key === current));
+      b.textContent = label;
+      b.addEventListener("click", () => { current = key; sortKey = null; renderAll(); });
+      g.appendChild(b);
+    }
+    tabs.appendChild(g);
+  }
+}
+
+function sorted(rows) {
+  if (!sortKey) return rows;
+  return [...rows].sort((a, b) => {
+    const x = a[sortKey], y = b[sortKey];
+    if (x == null && y == null) return 0;
+    if (x == null) return 1;
+    if (y == null) return -1;
+    return (typeof x === "string" ? x.localeCompare(y) : x - y) * sortDir;
+  });
+}
+
+function renderTable() {
+  const rows = DATA.tasks[current] || [];
+  const cols = columns(current);
+  const thead = document.querySelector("#board thead"), tbody = document.querySelector("#board tbody");
+  thead.innerHTML = "<tr>" + cols.map(c => `<th data-key="${c.key}"${sortKey === c.key ?
+    ` aria-sort="${sortDir > 0 ? "ascending" : "descending"}"` : ""}>${c.label}</th>`).join("") + "</tr>";
+  tbody.innerHTML = sorted(rows).map(e => `<tr class="${e.ranked ? "" : "unranked"}" title="${esc(e.description)}">` +
+    cols.map(c => `<td>${c.fmt(e)}</td>`).join("") + "</tr>").join("");
+  thead.querySelectorAll("th").forEach(th => th.addEventListener("click", () => {
+    const k = th.dataset.key;
+    if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = (k === "skill" || k === "battery_share" || k === "battery_pln_mw_year") ? -1 : 1; }
+    renderTable();
+  }));
+  const [, label, grp] = TASKS.find(t => t[0] === current);
+  const ref = current.endsWith("price") ? "the weekly naive forecast (same quarter-hour a week earlier)" : "the PSE day-ahead plan (PKD)";
+  document.getElementById("tasknote").textContent = `${grp}, ${label.toLowerCase()}: ${rows.length} models. Skill reference: ${ref}.`;
+}
+
+function lineChart(svgId, legendId, series, xs, xlabel, xfmt, tipId, vfmt) {
+  const svg = document.getElementById(svgId), W = 520, H = 260, L = 56, R = 12, T = 12, B = 38;
+  const all = series.flatMap(s => s.y).filter(v => v != null && isFinite(v));
+  if (!all.length) { svg.innerHTML = ""; return; }
+  let lo = Math.min(...all), hi = Math.max(...all);
+  const pad = (hi - lo) * 0.08 || 1; lo = Math.max(0, lo - pad); hi += pad;
+  const x = i => L + (xs.length === 1 ? 0 : i * (W - L - R) / (xs.length - 1));
+  const y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
+  const ticks = 5, parts = [];
+  for (let k = 0; k <= ticks; k++) {
+    const v = lo + (hi - lo) * k / ticks, yy = y(v);
+    parts.push(`<line x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}" stroke="${css("--grid")}" stroke-width="1"/>`);
+    parts.push(`<text x="${L - 6}" y="${yy + 4}" text-anchor="end" font-size="11" fill="${css("--muted")}">${fmt0.format(v)}</text>`);
+  }
+  const step = Math.max(1, Math.ceil(xs.length / 8));
+  xs.forEach((v, i) => { if (i % step === 0) parts.push(`<text x="${x(i)}" y="${H - B + 16}" text-anchor="middle" font-size="11" fill="${css("--muted")}">${xfmt(v)}</text>`); });
+  parts.push(`<text x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle" font-size="11" fill="${css("--muted")}">${xlabel}</text>`);
+  series.forEach(s => {
+    const pts = s.y.map((v, i) => v == null ? null : `${x(i).toFixed(1)},${y(v).toFixed(1)}`).filter(Boolean).join(" ");
+    parts.push(`<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="${s.ref ? 1.5 : 2}"${s.ref ? ' stroke-dasharray="5 4"' : ""} stroke-linejoin="round"/>`);
+  });
+  parts.push(`<line id="${svgId}-x" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="${css("--axis")}" stroke-width="1" visibility="hidden"/>`);
+  svg.innerHTML = parts.join("");
+  document.getElementById(legendId).innerHTML = series.map(s => `<span style="--c:${s.color}">${esc(s.name)}</span>`).join("");
+  const tip = document.getElementById(tipId), cross = document.getElementById(`${svgId}-x`);
+  svg.onmousemove = ev => {
+    const box = svg.getBoundingClientRect(), sx = (ev.clientX - box.left) * W / box.width;
+    const i = Math.max(0, Math.min(xs.length - 1, Math.round((sx - L) / ((W - L - R) / Math.max(1, xs.length - 1)))));
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    const rows = series.map(s => ({ s, v: s.y[i] })).filter(r => r.v != null).sort((a, b) => a.v - b.v);
+    tip.innerHTML = `<div class="t">${esc(xlabel)} ${esc(xfmt(xs[i]))}</div>` +
+      rows.map(r => `<div class="r" style="--c:${r.s.color}">${esc(r.s.name)}: <b>${vfmt(r.v)}</b></div>`).join("");
+    tip.hidden = false;
+    const px = x(i) * box.width / W, left = px > box.width / 2 ? px - tip.offsetWidth - 12 : px + 12;
+    tip.style.left = `${left}px`; tip.style.top = "8px";
+  };
+  svg.onmouseleave = () => { tip.hidden = true; cross.setAttribute("visibility", "hidden"); };
+}
+
+function renderCharts() {
+  const rows = DATA.tasks[current] || [];
+  const refId = current.endsWith("price") ? "naive_week" : "pse_plan";
+  const ranked = rows.filter(e => e.ranked && e.id !== refId).slice(0, 4);
+  const refs = rows.filter(e => e.id === refId);
+  const pick = [...ranked, ...refs];
+  const intraday = current.startsWith("intraday");
+  const key = intraday ? "by_lead_hour" : "by_hour";
+  document.getElementById("chart1title").textContent = intraday ? "MAE by lead time (hours after the origin)" : "MAE by hour of delivery (Polish time)";
+  const xs1 = intraday ? [1, 2, 3, 4, 5] : [...Array(24).keys()];
+  const mk = (e, i, k, xs) => ({ name: e.name, ref: !e.ranked || refs.includes(e), color: refs.includes(e) ? css("--ref") : css(COLORS[i % COLORS.length]),
+    y: xs.map(v => (e[k] || {})[String(v)] ?? null) });
+  const vf = v => current.endsWith("price") ? fmt1.format(v) + " PLN/MWh" : fmt0.format(v) + " MW";
+  lineChart("chart1", "legend1", pick.map((e, i) => mk(e, i, key, xs1)), xs1, intraday ? "lead (h)" : "hour",
+    v => intraday ? `${v}-${v + 1}` : String(v), "tip1", vf);
+  const months = [...new Set(pick.flatMap(e => Object.keys(e.by_month || {})))].sort();
+  lineChart("chart2", "legend2", pick.map((e, i) => mk(e, i, "by_month", months)), months, "month",
+    m => new Date(m + "-01T00:00:00Z").toLocaleString("en-GB", { month: "short", year: "2-digit", timeZone: "UTC" }), "tip2", vf);
+}
+
+function renderTiles() {
+  const out = [];
+  for (const [key, label, grp] of TASKS) {
+    const rows = (DATA.tasks[key] || []).filter(e => e.ranked);
+    if (!rows.length) continue;
+    const best = rows[0];
+    const ref = key.endsWith("price") ? "weekly naive" : "PSE plan";
+    out.push(`<div class="card tile"><div class="label">${grp}, ${label.toLowerCase()}</div>` +
+      `<div class="value">${esc(best.name)}</div>` +
+      `<div class="note">MAE ${key.endsWith("price") ? fmt1.format(best.mae) : fmt0.format(best.mae)} ${unit(key)}` +
+      (best.skill != null ? `, ${pct(best.skill, 1)} vs ${ref}` : "") + `</div></div>`);
+  }
+  document.getElementById("tiles").innerHTML = out.join("");
+}
+
+function renderAll() { renderTabs(); renderTable(); renderCharts(); }
+
+fetch("leaderboard.json", { cache: "no-cache" })
+  .then(r => { if (!r.ok) throw new Error(`leaderboard.json: HTTP ${r.status}`); return r.json(); })
+  .then(d => {
+    DATA = d;
+    const [lo, hi] = d.period;
+    const f = s => new Date(s + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+    document.getElementById("period").textContent = `${f(lo)} to ${f(hi)}`;
+    document.getElementById("generated").textContent = `Scores generated ${d.generated_utc.slice(0, 10)}, benchmark v${d.benchmark_version}`;
+    renderTiles(); renderAll();
+    if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderCharts);
+  })
+  .catch(err => { const e = document.getElementById("error"); e.hidden = false; e.textContent = "Could not load the leaderboard: " + err.message; });
+</script>
+</body>
+</html>

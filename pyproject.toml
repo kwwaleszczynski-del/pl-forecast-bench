@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pl-forecast-bench"
+version = "1.0.0"
+description = "A citable, leakage-checked benchmark of day-ahead and intraday forecasts for the Polish power system: wind, solar, demand and the day-ahead price."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Konrad Waleszczyński" }]
+keywords = ["forecasting", "benchmark", "poland", "wind", "solar", "electricity-demand", "electricity-price", "pse"]
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pyarrow>=14",
+    "scipy>=1.11",
+    "scikit-learn>=1.4",
+    "lightgbm>=4.3",
+    "requests>=2.31",
+    "pse-opendata @ git+https://github.com/kwwaleszczynski-del/pse-opendata@8b01ec882b6f3af9c9ea91308293dda64108d705",
+    "pl-bess-paper-trading @ git+https://github.com/kwwaleszczynski-del/pl-bess-paper-trading@0d60535e4f79841108bc00faba2e85b4b6fe2088",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+# zero-shot time-series foundation models (PyTorch; large downloads, see README). Toto (toto-ts) pins old versions
+# of torch, numpy and pandas, so it is installed separately with --no-deps (README, "Foundation models").
+foundation = [
+    "torch>=2.4",
+    "chronos-forecasting>=2.3",
+    "timesfm[torch]>=3.0.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/kwwaleszczynski-del/pl-forecast-bench"
+Leaderboard = "https://kwwaleszczynski-del.github.io/pl-forecast-bench/"
+
+[project.scripts]
+plfb = "plfb.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = ["data: needs the downloaded benchmark data (run `plfb data build` first)"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["plfb"]
+known-local-folder = ["conftest"]

@@ -1,0 +1,17 @@
+{
+ "name": "naive_day",
+ "display_name": "Seasonal naive, day",
+ "kind": "naive",
+ "inputs": [
+  "actuals"
+ ],
+ "description": "Same quarter-hour of the newest fully public day (D-2 day-ahead for wind, PV, demand; D-1 for the price; 24 h earlier intraday).",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/tree/main/src/plfb/baselines",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT"
+}

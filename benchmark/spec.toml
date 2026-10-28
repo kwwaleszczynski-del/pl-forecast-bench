@@ -1,0 +1,74 @@
+# pl-forecast-bench v1: the frozen definition of the benchmark.
+# Changing anything in this file makes results incomparable with the published leaderboard.
+
+[benchmark]
+name = "pl-forecast-bench"
+version = "1.0"
+timezone = "Europe/Warsaw"
+resolution_minutes = 15
+
+# Business days in Polish local time, inclusive. Day-ahead rows belong to the split of their delivery day,
+# intraday rows to the split of the local date of their origin.
+[splits]
+data_start = "2024-06-14"     # first business day of the PSE reports API
+train = ["2024-06-21", "2025-06-30"]
+val = ["2025-07-01", "2025-09-30"]
+test = ["2025-10-01", "2026-09-30"]
+
+[tracks.day_ahead]
+# One forecast per delivery day D, issued on D-1 at this local time. The SDAC order book for D closes on D-1 at
+# 12:00 CET/CEST (to be verified against the current market rules).
+issue_local = "10:00"
+variables = ["wind", "pv", "demand", "price"]
+
+[tracks.intraday]
+# Origins at every full hour; targets are the quarter-hours starting 60 to 345 minutes after the origin,
+# i.e. delivery 1 to 6 hours ahead (20 intervals).
+origin_step_minutes = 60
+first_lead_minutes = 60
+last_lead_minutes = 345
+# The day-ahead price of D is known from D-1 afternoon, so there is no intraday price task.
+variables = ["wind", "pv", "demand"]
+
+[quantiles]
+levels = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+
+[availability]
+# Actual wind, PV and demand (PSE his-wlk-cal) are published in near real time; on 2026-10-28 the feed ran
+# 35-40 minutes behind the end of the interval. A value becomes visible this many minutes after its interval ends.
+observation_lag_minutes = 60
+# An ECMWF IFS run becomes visible this many hours after its initialisation time (Open-Meteo states 4-6 hours).
+nwp_delay_hours = 7
+# Prices (csdac-pln) and the PSE day-ahead plan (pdgopkd) become visible at the publication timestamp the API
+# reports for the business day.
+
+[variables.wind]
+report = "his-wlk-cal"
+field = "wi"
+unit = "MW"
+normaliser = "installed_capacity"
+value_metric = "imbalance_cost"
+sign = 1                       # a producer sells the forecast
+
+[variables.pv]
+report = "his-wlk-cal"
+field = "pv"
+unit = "MW"
+normaliser = "installed_capacity"
+value_metric = "imbalance_cost"
+sign = 1
+
+[variables.demand]
+report = "his-wlk-cal"
+field = "demand"
+unit = "MW"
+normaliser = "mean_actual"
+value_metric = "imbalance_cost"
+sign = -1                      # a supplier buys the forecast
+
+[variables.price]
+report = "csdac-pln"
+field = "csdac_pln"
+unit = "PLN/MWh"
+normaliser = "mean_abs_actual"
+value_metric = "battery_profit"

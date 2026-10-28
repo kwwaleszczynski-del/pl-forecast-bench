@@ -1,0 +1,22 @@
+{
+ "name": "pse_plan",
+ "display_name": "PSE plan (PKD)",
+ "kind": "official forecast",
+ "inputs": [
+  "PSE pdgopkd"
+ ],
+ "reference": true,
+ "description": "Day-ahead coordinated plan of PSE. Day-ahead it is published after the SDAC gate (13:30-20:30 on D-1), so it is a reference with more information, not ranked; intraday it is as of the origin.",
+ "as_of": true,
+ "probabilistic": false,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/tree/main/src/plfb/baselines",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT",
+ "not_as_of_tasks": [
+  "day_ahead/wind",
+  "day_ahead/pv",
+  "day_ahead/demand"
+ ]
+}

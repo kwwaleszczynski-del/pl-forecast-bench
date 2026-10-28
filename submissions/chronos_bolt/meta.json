@@ -1,0 +1,17 @@
+{
+ "name": "chronos_bolt",
+ "display_name": "Chronos-Bolt small",
+ "inputs": [
+  "actuals"
+ ],
+ "description": "amazon/chronos-bolt-small (Apache-2.0), zero-shot on the target's own history: 2,048 quarter-hours intraday, 1,024 hours day-ahead (hourly forecast interpolated to quarter-hours).",
+ "kind": "foundation, zero-shot",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT (code); model weights Apache-2.0"
+}

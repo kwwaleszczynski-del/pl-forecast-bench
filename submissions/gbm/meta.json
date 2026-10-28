@@ -1,0 +1,20 @@
+{
+ "name": "gbm",
+ "display_name": "Gradient boosting",
+ "kind": "GBM, NWP",
+ "inputs": [
+  "actuals",
+  "ECMWF IFS",
+  "calendar",
+  "PSE plan (intraday)"
+ ],
+ "description": "LightGBM for the mean and each decile on NWP, lag and calendar features; quarterly refits on an expanding window.",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/tree/main/src/plfb/baselines",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT"
+}

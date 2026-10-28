@@ -1,0 +1,87 @@
+# Eight weather points for the NWP features. Each point stands for the voivodeships listed with it; its weights
+# are the voivodeships' installed wind and PV capacity and population.
+#
+# Capacity: URE "Mapa OZE" (licensed and registered installations, state on 2026-06-30, voivodeship sums,
+# https://www.ure.gov.pl/pl/oze/potencjal-krajowy-oze/8108) plus about 14 GW of PV micro-installations, which the URE
+# list does not contain, spread by population. Population: GUS, 2025-12-31. Only the relative weights matter.
+# The weights describe the fleet in mid-2026; they are fixed for the whole benchmark period.
+
+[[points]]
+id = "zp"
+name = "West Pomerania"
+lat = 53.55
+lon = 15.20
+voivodeships = ["zachodniopomorskie"]
+wind_mw = 2661.2
+pv_mw = 1967.4
+population = 1612680
+
+[[points]]
+id = "pm"
+name = "Pomerania"
+lat = 54.15
+lon = 17.75
+voivodeships = ["pomorskie"]
+wind_mw = 1690.1
+pv_mw = 1850.4
+population = 2358409
+
+[[points]]
+id = "ne"
+name = "North-east"
+lat = 53.75
+lon = 21.75
+voivodeships = ["warmińsko-mazurskie", "podlaskie"]
+wind_mw = 921.6
+pv_mw = 2258.4
+population = 2466177
+
+[[points]]
+id = "kp"
+name = "Kuyavia"
+lat = 52.85
+lon = 18.40
+voivodeships = ["kujawsko-pomorskie"]
+wind_mw = 988.1
+pv_mw = 1372.6
+population = 1971891
+
+[[points]]
+id = "wp"
+name = "Greater Poland and Lubusz"
+lat = 52.25
+lon = 16.75
+voivodeships = ["wielkopolskie", "lubuskie"]
+wind_mw = 2041.5
+pv_mw = 5639.9
+population = 4434903
+
+[[points]]
+id = "ce"
+name = "Centre"
+lat = 51.95
+lon = 20.25
+voivodeships = ["łódzkie", "mazowieckie"]
+wind_mw = 1460.2
+pv_mw = 4142.0
+population = 7834682
+
+[[points]]
+id = "sw"
+name = "South-west"
+lat = 50.85
+lon = 17.25
+voivodeships = ["dolnośląskie", "opolskie", "śląskie"]
+wind_mw = 970.7
+pv_mw = 4624.3
+population = 8042601
+
+[[points]]
+id = "se"
+name = "South-east"
+lat = 50.75
+lon = 21.75
+voivodeships = ["lubelskie", "małopolskie", "podkarpackie", "świętokrzyskie"]
+wind_mw = 661.3
+pv_mw = 4906.7
+population = 8611167

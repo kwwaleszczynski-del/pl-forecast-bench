@@ -1,0 +1,23 @@
+# Installed capacity of onshore wind and PV in Poland (MW), linear between the dates.
+# Used only to normalise errors (nMAE); models must not use it, because a value interpolated towards a later date
+# was not known at the time of the forecast. PV includes prosumer micro-installations, as the PSE PV series does.
+#
+# Sources:
+#   [FE]  Forum Energii, "Transformacja energetyczna w Polsce. Rocznik 2026" (2026-09-04), data of URE, MKiŚ, PSE:
+#         https://www.forum-energii.eu/download/pobierz/rocznik-dane-o-energetyce
+#   [GWZ] gramwzielone.pl citing PSE capacity counts: https://www.gramwzielone.pl/?p=20363768 (2026-06-19),
+#         https://www.gramwzielone.pl/?p=20381844 (2026-10-19)
+
+wind = [
+    { date = "2024-12-31", mw = 10600 },   # [FE]
+    { date = "2025-10-01", mw = 11154 },   # [GWZ] 2026-10-19
+    { date = "2025-12-31", mw = 11200 },   # [FE]
+    { date = "2026-10-01", mw = 11794 },   # [GWZ] 2026-10-19
+]
+pv = [
+    { date = "2024-12-31", mw = 21300 },   # [FE]
+    { date = "2025-09-01", mw = 24465 },   # [GWZ] 2026-10-19
+    { date = "2025-12-31", mw = 25900 },   # [FE]
+    { date = "2026-05-01", mw = 27083 },   # [GWZ] 2026-06-19
+    { date = "2026-09-01", mw = 28231 },   # [GWZ] 2026-10-19
+]

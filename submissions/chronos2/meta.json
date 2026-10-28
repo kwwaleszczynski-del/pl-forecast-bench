@@ -1,0 +1,17 @@
+{
+ "name": "chronos2",
+ "display_name": "Chronos-2",
+ "inputs": [
+  "actuals"
+ ],
+ "description": "amazon/chronos-2 (Apache-2.0), zero-shot, univariate; same contexts as Chronos-Bolt.",
+ "kind": "foundation, zero-shot",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT (code); model weights Apache-2.0"
+}

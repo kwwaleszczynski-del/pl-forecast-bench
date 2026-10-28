@@ -1,0 +1,17 @@
+{
+ "name": "timesfm",
+ "display_name": "TimesFM 2.5",
+ "inputs": [
+  "actuals"
+ ],
+ "description": "google/timesfm-2.5-200m-pytorch (Apache-2.0), zero-shot, univariate, continuous quantile head.",
+ "kind": "foundation, zero-shot",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT (code); model weights Apache-2.0"
+}
