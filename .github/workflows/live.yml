@@ -1,0 +1,46 @@
+name: live
+
+# Monthly live track (CPU reference models on each month after the frozen test year).
+# The schedule runs only when the repository variable DASHBOARD_SCHEDULE is "on"; a manual run always works.
+
+on:
+  schedule:
+    - cron: "17 5 5 * *"          # 05:17 UTC on the 5th: scores the previous month
+  workflow_dispatch:
+    inputs:
+      month:
+        description: "Month to score, YYYY-MM (empty: the latest month that can be scored)"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: live
+  cancel-in-progress: false
+
+jobs:
+  live:
+    if: github.event_name == 'workflow_dispatch' || vars.DASHBOARD_SCHEDULE == 'on'
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install -e .
+      - name: Download a rolling year of data, forecast and score the month
+        env:
+          PLFB_DATA: ${{ runner.temp }}/plfb
+          MONTH: ${{ github.event.inputs.month }}
+        run: python -m plfb live ${MONTH:+--month "$MONTH"}
+      - name: Commit the scores
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/live
+          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
+          git commit -m "Live track: $(ls docs/live | grep -E '^[0-9]{4}-[0-9]{2}\.json$' | sort | tail -1 | cut -c1-7)"
+          git push

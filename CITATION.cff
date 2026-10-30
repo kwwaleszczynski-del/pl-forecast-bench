@@ -5,8 +5,8 @@ type: software
 authors:
   - family-names: "Waleszczyński"
     given-names: "Konrad"
-version: "1.0.0"
-date-released: "2026-10-28"
+version: "1.1.0"
+date-released: "2026-10-30"
 license: MIT
 repository-code: "https://github.com/kwwaleszczynski-del/pl-forecast-bench"
 url: "https://kwwaleszczynski-del.github.io/pl-forecast-bench/"

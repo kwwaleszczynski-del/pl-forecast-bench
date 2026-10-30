@@ -1,0 +1,13 @@
+{
+ "generated_utc": "2026-10-30T19:12:41Z",
+ "models": [
+  "persistence",
+  "naive_day",
+  "naive_week",
+  "pse_plan",
+  "ridge",
+  "gbm"
+ ],
+ "train_months": 12,
+ "months": []
+}

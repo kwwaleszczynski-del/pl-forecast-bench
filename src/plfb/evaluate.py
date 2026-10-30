@@ -138,11 +138,13 @@ def checksums_digest() -> str | None:
     return hashlib.sha256(canon.encode()).hexdigest()
 
 
-def score(root: Path, df: pd.DataFrame, name: str, split: str, allow_missing: bool = False) -> dict:
+def score(root: Path, df: pd.DataFrame, name: str, split: str | list, allow_missing: bool = False,
+          label: str | None = None, store: Store | None = None) -> dict:
+    """Scores of a submission; ``split`` is a split name or a list of days (the live track), ``label`` names it."""
     by_task = submission.check(df, split, allow_missing=allow_missing)
-    store = load_store(root)
+    store = store or load_store(root)
     out = {
-        "name": name, "split": split, "scored_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "name": name, "split": label or split, "scored_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "benchmark_version": spec().raw["benchmark"]["version"], "plfb_version": __version__,
         "data_checksums_sha256": checksums_digest(),
         "tasks": {},

@@ -62,6 +62,22 @@ sample: the same deciles within sampling noise, about 2,500 times faster intrada
 sample median. All scores, by lead time, hour and month, are in `submissions/*/` and on the
 [leaderboard](https://kwwaleszczynski-del.github.io/pl-forecast-bench/).
 
+## Live track
+
+Benchmark v1 is frozen. Next to it, a monthly job (`.github/workflows/live.yml`) forecasts every new month with the
+reference models that run on a CPU (persistence, seasonal naive, PSE plan, ridge, gradient boosting), with the same
+tasks, as-of rules and metrics, and adds the scores to `docs/live/` and to the site. It differs from v1 in three ways:
+
+- the models are refitted once a month, at its first midnight, on the previous 12 months (a rolling window, so the
+  job downloads about 13 months of weather, some 3,300 Open-Meteo units, instead of the whole history);
+- foundation models are not included (no GPU in the runner);
+- the imbalance cost of the newest month is preliminary, because PSE corrects imbalance prices for about 45 days.
+
+Live months are therefore not part of v1 and not comparable one to one with the test-year leaderboard. The job runs
+on the 5th of each month for the previous month only when the repository variable `DASHBOARD_SCHEDULE` is `on` (it
+is off by default); a manual run (`workflow_dispatch`, optional month) always works. Locally:
+`python -m plfb live --month 2026-10`.
+
 ## Tasks
 
 | track | variables | origin | targets | rows in the test year |
@@ -247,7 +263,7 @@ See [CITATION.cff](CITATION.cff); the archived release and its DOI are listed th
 
 ```
 Waleszczyński, K. (2026). pl-forecast-bench: a leakage-checked forecasting benchmark for the Polish power system
-(version 1.0.0). https://github.com/kwwaleszczynski-del/pl-forecast-bench
+(version 1.1.0). https://github.com/kwwaleszczynski-del/pl-forecast-bench
 ```
 
 ## Limitations
@@ -266,8 +282,9 @@ Waleszczyński, K. (2026). pl-forecast-bench: a leakage-checked forecasting benc
 ```
 benchmark/      spec.toml (tasks, splits, availability), points.toml, capacity.toml, checksums.json
 src/plfb/       pse_data, nwp (downloads), dataset (tables, checksums), asof (guarded store), tasks, features,
-                metrics, evaluate, submission, leaderboard, baselines/ (models, run, foundation)
+                metrics, evaluate, submission, leaderboard, live (monthly track),
+                baselines/ (models, run, foundation)
 submissions/    one folder per entry: meta.json, scores_test.json
-docs/           the leaderboard site (GitHub Pages, main:/docs)
+docs/           the leaderboard site (GitHub Pages, main:/docs); docs/live/ holds the monthly live scores
 tests/          leakage tests, metrics, submission checks
 ```

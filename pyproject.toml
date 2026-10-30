@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pl-forecast-bench"
-version = "1.0.0"
+version = "1.1.0"
 description = "A citable, leakage-checked benchmark of day-ahead and intraday forecasts for the Polish power system: wind, solar, demand and the day-ahead price."
 readme = "README.md"
 requires-python = ">=3.11"

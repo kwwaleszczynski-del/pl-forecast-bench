@@ -136,6 +136,16 @@ footer { color: var(--muted); font-size: 13px; padding: 24px 0 40px; border-top:
   </div>
 </section>
 
+<section id="live">
+  <h2>Live track</h2>
+  <p class="sub">Every month after the frozen test year, the reference models that run on a CPU (naive, PSE plan,
+  ridge, gradient boosting) forecast the new month with the same tasks and as-of rules, refitted on the previous 12
+  months, and are scored here by a scheduled job. Foundation models are not part of it (they need a GPU), and the
+  live months are not part of benchmark v1. Same task as the tabs above; MAE, skill against the reference below it.</p>
+  <div class="card tablewrap"><table id="liveboard"><thead></thead><tbody></tbody></table></div>
+  <p class="note" id="livenote"></p>
+</section>
+
 <section>
   <h2>Rules</h2>
   <ul class="rules">
@@ -350,7 +360,38 @@ function renderTiles() {
   document.getElementById("tiles").innerHTML = out.join("");
 }
 
-function renderAll() { renderTabs(); renderTable(); renderCharts(); }
+let LIVE = null;
+function renderLive() {
+  const note = document.getElementById("livenote");
+  const table = document.getElementById("liveboard");
+  const months = (LIVE && LIVE.months) || [];
+  if (!months.length) {
+    table.hidden = true;
+    note.textContent = "No live months yet. The monthly job is switched off by default; it scores the previous month on the 5th once the repository owner switches it on.";
+    return;
+  }
+  table.hidden = false;
+  const shown = months.slice(-12);
+  const names = Object.fromEntries((DATA ? DATA.tasks[current] || [] : []).map(e => [e.id, e.name]));
+  const isPrice = current.endsWith("price");
+  const ids = LIVE.models.filter(id => shown.some(m => (m.models[id] || {})[current]));
+  table.querySelector("thead").innerHTML = "<tr><th>Model</th>" + shown.map(m => `<th>${esc(m.month)}</th>`).join("") + "</tr>";
+  table.querySelector("tbody").innerHTML = ids.map(id => "<tr><td>" + esc(names[id] || id) + "</td>" + shown.map(m => {
+    const e = (m.models[id] || {})[current];
+    if (!e) return "<td>–</td>";
+    const v = isPrice ? fmt1.format(e.mae) : fmt0.format(e.mae);
+    const sk = e.skill == null || (e.ref === id) ? "" : `<div class="ci ${e.skill >= 0 ? "pos" : "neg"}">${pct(e.skill, 1)}</div>`;
+    return `<td>${v}${sk}</td>`;
+  }).join("") + "</tr>").join("");
+  note.textContent = `Unit: ${unit(current)}. Refit once per month on the previous ${LIVE.train_months} months; the imbalance prices of the newest month can still be corrected by PSE.`;
+}
+
+function renderAll() { renderTabs(); renderTable(); renderCharts(); renderLive(); }
+
+fetch("live/index.json", { cache: "no-cache" })
+  .then(r => r.ok ? r.json() : null)
+  .catch(() => null)
+  .then(d => { LIVE = d; if (DATA) renderLive(); });
 
 fetch("leaderboard.json", { cache: "no-cache" })
   .then(r => { if (!r.ok) throw new Error(`leaderboard.json: HTTP ${r.status}`); return r.json(); })

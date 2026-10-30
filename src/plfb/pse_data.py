@@ -65,8 +65,9 @@ def publication_times(client: pse.Client, report: str, start: date, end: date) -
     return out
 
 
-def download(root: Path, end: date = date(2026, 10, 1)) -> None:
-    start = spec().data_start
+def download(root: Path, end: date = date(2026, 10, 1), start: date | None = None) -> None:
+    """Business days ``start`` (default: the first day of the benchmark) to ``end`` into ``<root>/raw/pse``."""
+    start = start or spec().data_start
     out = raw_dir(root)
     out.mkdir(parents=True, exist_ok=True)
     client = pse.Client(cache_dir=root / "raw" / "pse-cache")

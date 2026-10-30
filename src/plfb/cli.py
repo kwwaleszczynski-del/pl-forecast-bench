@@ -8,6 +8,7 @@ Usage:
     python -m plfb baselines --jobs 2                          # forecasts of the reference models
     python -m plfb evaluate --forecast my.parquet --name my-model --out submissions/my-model
     python -m plfb leaderboard                                 # docs/leaderboard.json from submissions/*/scores.json
+    python -m plfb live                                        # monthly live track (CPU models), docs/live/
     python -m plfb figures                                     # docs/img/skill.png
 """
 from __future__ import annotations
@@ -68,6 +69,13 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--submissions", type=Path, default=config.REPO / "submissions")
     s.add_argument("--docs", type=Path, default=config.REPO / "docs")
 
+    s = sub.add_parser("live", help="monthly live track: CPU models on a month after the frozen test year")
+    s.add_argument("--month", help="YYYY-MM (default: the latest month that can be scored)")
+    s.add_argument("--train-months", type=int, default=12)
+    s.add_argument("--no-download", action="store_true", help="use the data already in the data directory")
+    s.add_argument("--no-check", action="store_true", help="allow a month inside v1 (pipeline tests only)")
+    s.add_argument("--docs", type=Path, default=config.REPO / "docs")
+
     s = sub.add_parser("figures", help="summary figure of the leaderboard for the README")
     s.add_argument("--docs", type=Path, default=config.REPO / "docs")
 
@@ -106,6 +114,15 @@ def main(argv: list[str] | None = None) -> int:
     elif args.cmd == "leaderboard":
         from plfb import leaderboard
         leaderboard.build(args.submissions, args.docs)
+    elif args.cmd == "live":
+        os.environ.setdefault("OMP_NUM_THREADS", "2")
+        from plfb import live
+        try:
+            live.run(root, args.docs, month=args.month, train_months=args.train_months,
+                     download_data=not args.no_download, check=not args.no_check)
+        except ValueError as e:
+            logging.error("%s", e)
+            return 2
     elif args.cmd == "figures":
         from plfb import figures
         figures.skill_figure(args.docs / "leaderboard.json", args.docs / "img" / "skill.png")
