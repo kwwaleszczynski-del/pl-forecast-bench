@@ -29,9 +29,10 @@ the forecast**. Tests break if any feature or forecast changes when the future i
   better than gradient boosting (97.1). For the battery the difference almost vanishes: 83.1% against 82.7% of the
   perfect-foresight profit (337 and 336 thousand PLN/MW/year), so a lower MAE does not translate one to one into
   value.
-- **Foundation models need the weather.** Univariate Chronos-Bolt, Chronos-2 and TimesFM 2.5 forecast day-ahead
-  wind with 1,250-1,290 MW MAE, three times worse than with NWP (468 MW for Chronos-2 with covariates). Without
-  covariates they are competitive only for the price (Chronos-2 100.8 PLN/MWh, as good as ridge) and demand.
+- **Foundation models need the weather.** Univariate Chronos-Bolt, Chronos-2, TimesFM 2.5 and Toto forecast
+  day-ahead wind with 1,250-1,290 MW MAE, three times worse than with NWP (468 MW for Chronos-2 with covariates).
+  Without covariates they are competitive only for the price (Chronos-2 100.8 PLN/MWh, as good as ridge) and
+  demand.
 - **Calibration.** The decile models of gradient boosting are too sharp day-ahead: the 10-90% interval holds 59%
   of the wind and demand outcomes and 60% of prices; Chronos-2 with covariates holds 81%, 72% and 71%.
 - **Imbalance cost** (simplified settlement, see Metrics): day-ahead wind 6.8 PLN/MWh for the best model against
@@ -53,10 +54,13 @@ the origin):
 | Chronos-2 | 1,251 | 608 | 615 | 100.8 | 561 | 426 | 391 |
 | Chronos-2 + NWP | 468 | 360 | 551 | **88.5** | 372 | 310 | 373 |
 | TimesFM 2.5 | 1,274 | 629 | 749 | 109.8 | 602 | 453 | 421 |
+| Toto | 1,272 | 606 | 723 | 107.0 | 609 | 514 | 602 |
 
-Toto (Datadog/Toto-Open-Base-1.0) is wired in (`plfb foundation --models toto`) but was not run for this version:
-the shared GPU was taken by another job. All scores, by lead time, hour and month, are in `submissions/*/` and on
-the [leaderboard](https://kwwaleszczynski-del.github.io/pl-forecast-bench/).
+Toto's horizon here fits in one output patch, so all its samples come from one predictive distribution: they are
+drawn from a single forward pass (checked against the library's own sampler, which reruns the context for every
+sample: the same deciles within sampling noise, about 2,500 times faster intraday), and its point forecast is the
+sample median. All scores, by lead time, hour and month, are in `submissions/*/` and on the
+[leaderboard](https://kwwaleszczynski-del.github.io/pl-forecast-bench/).
 
 ## Tasks
 
@@ -150,7 +154,7 @@ Value (simplified, the settlement and market rules quoted here should be verifie
 | PSE plan (PKD) | the operator's plan | no |
 | ridge | NWP (8 points, aggregates), lags, calendar dummies; intraday also the PSE plan | errors of the previous 90 days |
 | gradient boosting | as ridge, LightGBM for the mean and each decile | yes |
-| Chronos-Bolt small, Chronos-2, TimesFM 2.5 (Toto ready, not run yet) | the target's own history; Chronos-2 also with NWP covariates | yes |
+| Chronos-Bolt small, Chronos-2, TimesFM 2.5, Toto | the target's own history; Chronos-2 also with NWP covariates | yes |
 
 The eight weather points stand for groups of voivodeships and carry their wind and PV capacity and population as
 weights (`benchmark/points.toml`). Gradient boosting has fixed settings (LightGBM, 300 trees for the mean, 200 per

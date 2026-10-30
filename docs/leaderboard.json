@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-28T17:39:35Z",
+ "generated_utc": "2026-10-30T19:36:33Z",
  "benchmark_version": "1.0",
  "split": "test",
  "period": [
@@ -331,6 +331,82 @@
     "rank": 4
    },
    {
+    "id": "toto",
+    "name": "Toto",
+    "kind": "foundation, zero-shot",
+    "as_of": true,
+    "reference": false,
+    "description": "Datadog/Toto-Open-Base-1.0 (Apache-2.0), zero-shot, univariate; median and deciles of 256 samples. The horizon fits in one output patch, so the samples are drawn from one forward pass (the same predictive distribution as TotoForecaster, which reruns the context per sample).",
+    "inputs": [
+     "actuals"
+    ],
+    "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+    "authors": [
+     "Konrad Waleszczyński"
+    ],
+    "ranked": true,
+    "mae": 1271.5417661508882,
+    "rmse": 1668.002703212704,
+    "nmae": 11.14839249960284,
+    "bias": -142.23611518344617,
+    "pinball": 495.70954933848947,
+    "crps": 991.4190986769789,
+    "coverage80": 69.95433789954339,
+    "width80": 3316.5216897827304,
+    "imbalance_cost_pln_mwh": 8.849451529386442,
+    "rows": 35040,
+    "rows_expected": 35040,
+    "complete": true,
+    "by_hour": {
+     "0": 1215.5802679332996,
+     "1": 1207.9481149902344,
+     "2": 1213.3540113179247,
+     "3": 1207.5463727656115,
+     "4": 1208.3026788549134,
+     "5": 1244.636768424089,
+     "6": 1290.8140609727832,
+     "7": 1268.4463631568387,
+     "8": 1216.1022306717546,
+     "9": 1119.417891092128,
+     "10": 1112.1737554804554,
+     "11": 1103.4982584768636,
+     "12": 1123.650165762956,
+     "13": 1133.2412061347857,
+     "14": 1166.720108498602,
+     "15": 1189.673101876204,
+     "16": 1258.4071913631074,
+     "17": 1328.968808157976,
+     "18": 1397.0238071526514,
+     "19": 1442.8706433296102,
+     "20": 1479.731767507224,
+     "21": 1525.829245271364,
+     "22": 1534.6112163838427,
+     "23": 1528.454352046099
+    },
+    "by_month": {
+     "2025-10": 1593.1789603172354,
+     "2025-11": 1282.4972136484782,
+     "2025-12": 1267.5576439115462,
+     "2026-01": 1379.9252391318046,
+     "2026-02": 1341.865025335766,
+     "2026-03": 1125.4932439535767,
+     "2026-04": 1422.8110184030322,
+     "2026-05": 1001.3046522207774,
+     "2026-06": 821.407696346834,
+     "2026-07": 1308.9018109641945,
+     "2026-08": 1110.6095183414748,
+     "2026-09": 1610.7818681605022
+    },
+    "ref_name": "pse_plan",
+    "skill": -2.172869397378698,
+    "skill_ci": [
+     -2.515162408747077,
+     -1.8534129229863405
+    ],
+    "ref_rows": 35040,
+    "rank": 5
+   },
+   {
     "id": "timesfm",
     "name": "TimesFM 2.5",
     "kind": "foundation, zero-shot",
@@ -404,7 +480,7 @@
      -1.8752613389351742
     ],
     "ref_rows": 35040,
-    "rank": 5
+    "rank": 6
    },
    {
     "id": "chronos_bolt",
@@ -480,7 +556,7 @@
      -1.9004715802438985
     ],
     "ref_rows": 35040,
-    "rank": 6
+    "rank": 7
    },
    {
     "id": "persistence",
@@ -556,7 +632,7 @@
      -2.361270888401214
     ],
     "ref_rows": 35040,
-    "rank": 7
+    "rank": 8
    },
    {
     "id": "naive_day",
@@ -632,7 +708,7 @@
      -2.4303203936411384
     ],
     "ref_rows": 35040,
-    "rank": 8
+    "rank": 9
    },
    {
     "id": "naive_week",
@@ -708,7 +784,7 @@
      -3.2448343967559072
     ],
     "ref_rows": 35040,
-    "rank": 9
+    "rank": 10
    },
    {
     "id": "pse_plan",
@@ -1095,6 +1171,82 @@
     "rank": 4
    },
    {
+    "id": "toto",
+    "name": "Toto",
+    "kind": "foundation, zero-shot",
+    "as_of": true,
+    "reference": false,
+    "description": "Datadog/Toto-Open-Base-1.0 (Apache-2.0), zero-shot, univariate; median and deciles of 256 samples. The horizon fits in one output patch, so the samples are drawn from one forward pass (the same predictive distribution as TotoForecaster, which reruns the context per sample).",
+    "inputs": [
+     "actuals"
+    ],
+    "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+    "authors": [
+     "Konrad Waleszczyński"
+    ],
+    "ranked": true,
+    "mae": 606.1768446417517,
+    "rmse": 1155.5757388956788,
+    "nmae": 2.2471015115631596,
+    "bias": 55.99396458326889,
+    "pinball": 245.7060647673905,
+    "crps": 491.412129534781,
+    "coverage80": 66.80650684931507,
+    "width80": 1129.50414977667,
+    "imbalance_cost_pln_mwh": 13.066601662081244,
+    "rows": 35040,
+    "rows_expected": 35040,
+    "complete": true,
+    "by_hour": {
+     "0": 8.631811447666117,
+     "1": 10.295291853604251,
+     "2": 11.440950827402611,
+     "3": 15.287569657417192,
+     "4": 33.801436695339255,
+     "5": 94.3996590696779,
+     "6": 291.26219237594603,
+     "7": 631.7286937603258,
+     "8": 1067.5901458251117,
+     "9": 1424.7750502244087,
+     "10": 1613.0017257156999,
+     "11": 1685.5328733405127,
+     "12": 1674.2971585088026,
+     "13": 1559.690567157066,
+     "14": 1355.3806143828926,
+     "15": 1085.5774725449862,
+     "16": 841.6251557265713,
+     "17": 572.7699708364618,
+     "18": 330.23318027924836,
+     "19": 144.3909378298616,
+     "20": 57.32907310423133,
+     "21": 19.861321097219808,
+     "22": 10.705737801120705,
+     "23": 8.635681340465807
+    },
+    "by_month": {
+     "2025-10": 568.4426749280891,
+     "2025-11": 392.5960523062282,
+     "2025-12": 202.70290383609648,
+     "2026-01": 313.4311313728363,
+     "2026-02": 505.4685405890658,
+     "2026-03": 616.2852476279872,
+     "2026-04": 760.104318401379,
+     "2026-05": 727.4679089505595,
+     "2026-06": 793.6713992154016,
+     "2026-07": 950.900457152582,
+     "2026-08": 717.2231412134067,
+     "2026-09": 724.0737361018711
+    },
+    "ref_name": "pse_plan",
+    "skill": -0.7807907005591697,
+    "skill_ci": [
+     -0.9442665818877511,
+     -0.6448404656415626
+    ],
+    "ref_rows": 35040,
+    "rank": 5
+   },
+   {
     "id": "chronos2",
     "name": "Chronos-2",
     "kind": "foundation, zero-shot",
@@ -1168,7 +1320,7 @@
      -0.6457777627484763
     ],
     "ref_rows": 35040,
-    "rank": 5
+    "rank": 6
    },
    {
     "id": "timesfm",
@@ -1244,7 +1396,7 @@
      -0.715008042867742
     ],
     "ref_rows": 35040,
-    "rank": 6
+    "rank": 7
    },
    {
     "id": "naive_day",
@@ -1320,7 +1472,7 @@
      -0.8670232892693741
     ],
     "ref_rows": 35040,
-    "rank": 7
+    "rank": 8
    },
    {
     "id": "naive_week",
@@ -1396,7 +1548,7 @@
      -1.2201940578069197
     ],
     "ref_rows": 35040,
-    "rank": 8
+    "rank": 9
    },
    {
     "id": "persistence",
@@ -1472,7 +1624,7 @@
      -8.874002735282598
     ],
     "ref_rows": 35040,
-    "rank": 9
+    "rank": 10
    },
    {
     "id": "pse_plan",
@@ -1935,6 +2087,82 @@
     "rank": 5
    },
    {
+    "id": "toto",
+    "name": "Toto",
+    "kind": "foundation, zero-shot",
+    "as_of": true,
+    "reference": false,
+    "description": "Datadog/Toto-Open-Base-1.0 (Apache-2.0), zero-shot, univariate; median and deciles of 256 samples. The horizon fits in one output patch, so the samples are drawn from one forward pass (the same predictive distribution as TotoForecaster, which reruns the context per sample).",
+    "inputs": [
+     "actuals"
+    ],
+    "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+    "authors": [
+     "Konrad Waleszczyński"
+    ],
+    "ranked": true,
+    "mae": 723.1959788467199,
+    "rmse": 1073.6404156189342,
+    "nmae": 3.903076529154828,
+    "bias": 64.92304250923053,
+    "pinball": 291.0358549210253,
+    "crps": 582.0717098420506,
+    "coverage80": 68.90696347031964,
+    "width80": 1743.583217171447,
+    "imbalance_cost_pln_mwh": 2.562555217800393,
+    "rows": 35040,
+    "rows_expected": 35040,
+    "complete": true,
+    "by_hour": {
+     "0": 376.8844509150257,
+     "1": 382.2286042326627,
+     "2": 384.0146037510701,
+     "3": 407.69873121789385,
+     "4": 446.94271301369866,
+     "5": 540.2300705800513,
+     "6": 712.7525798105737,
+     "7": 757.0531345515839,
+     "8": 775.0385683112157,
+     "9": 858.7812251979881,
+     "10": 939.0609892979453,
+     "11": 1002.0768154698202,
+     "12": 1015.7729884257278,
+     "13": 1001.3188028520975,
+     "14": 945.2898622431505,
+     "15": 874.0467522848887,
+     "16": 837.5130541470462,
+     "17": 778.0371385059932,
+     "18": 784.2778283283391,
+     "19": 779.9144896297089,
+     "20": 770.9754078125001,
+     "21": 720.1912338613013,
+     "22": 656.5002609749572,
+     "23": 610.103186906036
+    },
+    "by_month": {
+     "2025-10": 467.95581544672814,
+     "2025-11": 878.7919377143012,
+     "2025-12": 755.6621956590222,
+     "2026-01": 1210.8509973249538,
+     "2026-02": 835.4761264619374,
+     "2026-03": 693.8655538200286,
+     "2026-04": 907.904039420573,
+     "2026-05": 592.8046626816616,
+     "2026-06": 704.1133123942058,
+     "2026-07": 580.4956837066322,
+     "2026-08": 626.2646869513399,
+     "2026-09": 436.44824982367624
+    },
+    "ref_name": "pse_plan",
+    "skill": -0.7468413728912666,
+    "skill_ci": [
+     -0.9049331952246282,
+     -0.5922388781725649
+    ],
+    "ref_rows": 35040,
+    "rank": 6
+   },
+   {
     "id": "timesfm",
     "name": "TimesFM 2.5",
     "kind": "foundation, zero-shot",
@@ -2008,7 +2236,7 @@
      -0.6534871549373052
     ],
     "ref_rows": 35040,
-    "rank": 6
+    "rank": 7
    },
    {
     "id": "naive_week",
@@ -2084,7 +2312,7 @@
      -1.324609093696777
     ],
     "ref_rows": 35040,
-    "rank": 7
+    "rank": 8
    },
    {
     "id": "naive_day",
@@ -2160,7 +2388,7 @@
      -3.07706840944152
     ],
     "ref_rows": 35040,
-    "rank": 8
+    "rank": 9
    },
    {
     "id": "persistence",
@@ -2236,7 +2464,7 @@
      -5.33484761919621
     ],
     "ref_rows": 35040,
-    "rank": 9
+    "rank": 10
    },
    {
     "id": "pse_plan",
@@ -2704,6 +2932,83 @@
     "rank": 5
    },
    {
+    "id": "toto",
+    "name": "Toto",
+    "kind": "foundation, zero-shot",
+    "as_of": true,
+    "reference": false,
+    "description": "Datadog/Toto-Open-Base-1.0 (Apache-2.0), zero-shot, univariate; median and deciles of 256 samples. The horizon fits in one output patch, so the samples are drawn from one forward pass (the same predictive distribution as TotoForecaster, which reruns the context per sample).",
+    "inputs": [
+     "actuals"
+    ],
+    "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+    "authors": [
+     "Konrad Waleszczyński"
+    ],
+    "ranked": true,
+    "mae": 106.96402744625146,
+    "rmse": 179.46567089858772,
+    "nmae": 21.111896439557608,
+    "bias": -13.281943195322333,
+    "pinball": 43.19111064385461,
+    "crps": 86.38222128770921,
+    "coverage80": 71.46974885844749,
+    "width80": 279.643764800677,
+    "rows": 35040,
+    "rows_expected": 35040,
+    "complete": true,
+    "by_hour": {
+     "0": 40.46146659662952,
+     "1": 38.29010528062794,
+     "2": 42.42332632927045,
+     "3": 43.87565514044565,
+     "4": 46.91188657410504,
+     "5": 52.57077195363503,
+     "6": 83.08271545242937,
+     "7": 117.8569488981064,
+     "8": 128.53115659807807,
+     "9": 129.83213006382772,
+     "10": 129.04758688247367,
+     "11": 136.71742521991467,
+     "12": 147.0803255785067,
+     "13": 155.13664494882872,
+     "14": 154.34147992554756,
+     "15": 148.0196667914717,
+     "16": 154.48215273081112,
+     "17": 143.8065311406802,
+     "18": 134.9450266673467,
+     "19": 163.07705253872805,
+     "20": 149.35236546430195,
+     "21": 98.55831554590512,
+     "22": 69.50399156878746,
+     "23": 59.231930819576725
+    },
+    "by_month": {
+     "2025-10": 100.54883179758059,
+     "2025-11": 100.6663743765619,
+     "2025-12": 72.58867683861844,
+     "2026-01": 148.073659387609,
+     "2026-02": 62.91660215514046,
+     "2026-03": 110.54601699667374,
+     "2026-04": 115.27205578194724,
+     "2026-05": 96.77084725009497,
+     "2026-06": 110.64369350290298,
+     "2026-07": 96.45437970725439,
+     "2026-08": 123.1680659318483,
+     "2026-09": 143.01643939595752
+    },
+    "ref_name": "naive_week",
+    "skill": 0.32835029038714425,
+    "skill_ci": [
+     0.28794452099650114,
+     0.36646912217841693
+    ],
+    "ref_rows": 35040,
+    "battery_share": 79.21719968233974,
+    "battery_pln_mw_year": 321406.95019708795,
+    "rank": 6
+   },
+   {
     "id": "timesfm",
     "name": "TimesFM 2.5",
     "kind": "foundation, zero-shot",
@@ -2778,7 +3083,7 @@
     "ref_rows": 35040,
     "battery_share": 80.79613867418648,
     "battery_pln_mw_year": 327813.1595550522,
-    "rank": 6
+    "rank": 7
    },
    {
     "id": "naive_day",
@@ -2855,7 +3160,7 @@
     "ref_rows": 35040,
     "battery_share": 70.55987079405683,
     "battery_pln_mw_year": 286281.67833701137,
-    "rank": 7
+    "rank": 8
    },
    {
     "id": "naive_week",
@@ -2932,7 +3237,7 @@
     "ref_rows": 35040,
     "battery_share": 69.77525443715933,
     "battery_pln_mw_year": 283098.2642380983,
-    "rank": 8
+    "rank": 9
    },
    {
     "id": "persistence",
@@ -3009,7 +3314,7 @@
     "ref_rows": 35040,
     "battery_share": 0.0,
     "battery_pln_mw_year": 0.0,
-    "rank": 9
+    "rank": 10
    }
   ],
   "intraday/wind": [
@@ -3416,6 +3721,63 @@
     "rank": 7
    },
    {
+    "id": "toto",
+    "name": "Toto",
+    "kind": "foundation, zero-shot",
+    "as_of": true,
+    "reference": false,
+    "description": "Datadog/Toto-Open-Base-1.0 (Apache-2.0), zero-shot, univariate; median and deciles of 256 samples. The horizon fits in one output patch, so the samples are drawn from one forward pass (the same predictive distribution as TotoForecaster, which reruns the context per sample).",
+    "inputs": [
+     "actuals"
+    ],
+    "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+    "authors": [
+     "Konrad Waleszczyński"
+    ],
+    "ranked": true,
+    "mae": 608.7880713817245,
+    "rmse": 868.192028828248,
+    "nmae": 5.3302592379158025,
+    "bias": -52.29286382782401,
+    "pinball": 239.43874070899517,
+    "crps": 478.87748141799034,
+    "coverage80": 74.60216894977168,
+    "width80": 1731.3464653823364,
+    "rows": 175200,
+    "rows_expected": 175200,
+    "complete": true,
+    "by_lead_hour": {
+     "1": 399.6867839863747,
+     "2": 516.027044406978,
+     "3": 621.4209757184869,
+     "4": 713.7488953850176,
+     "5": 793.0566574117652
+    },
+    "by_month": {
+     "2025-10": 699.2636465621907,
+     "2025-11": 575.5081075323826,
+     "2025-12": 502.3780219947405,
+     "2026-01": 563.4367821252966,
+     "2026-02": 562.0393885946365,
+     "2026-03": 640.6709813086529,
+     "2026-04": 710.1631342854479,
+     "2026-05": 547.3506550732029,
+     "2026-06": 484.7691698249648,
+     "2026-07": 652.6799279910508,
+     "2026-08": 653.7045708885603,
+     "2026-09": 711.8934683125135,
+     "2026-10": 331.7696442708333
+    },
+    "ref_name": "pse_plan",
+    "skill": -0.519186423787676,
+    "skill_ci": [
+     -0.6437520118437148,
+     -0.40260077449803755
+    ],
+    "ref_rows": 175200,
+    "rank": 8
+   },
+   {
     "id": "persistence",
     "name": "Persistence",
     "kind": "naive",
@@ -3470,7 +3832,7 @@
      -0.6064749176944103
     ],
     "ref_rows": 175200,
-    "rank": 8
+    "rank": 9
    },
    {
     "id": "naive_day",
@@ -3527,7 +3889,7 @@
      -2.026195076753694
     ],
     "ref_rows": 175200,
-    "rank": 9
+    "rank": 10
    },
    {
     "id": "naive_week",
@@ -3584,7 +3946,7 @@
      -3.263026392246301
     ],
     "ref_rows": 175200,
-    "rank": 10
+    "rank": 11
    }
   ],
   "intraday/pv": [
@@ -3991,6 +4353,63 @@
     "rank": 7
    },
    {
+    "id": "toto",
+    "name": "Toto",
+    "kind": "foundation, zero-shot",
+    "as_of": true,
+    "reference": false,
+    "description": "Datadog/Toto-Open-Base-1.0 (Apache-2.0), zero-shot, univariate; median and deciles of 256 samples. The horizon fits in one output patch, so the samples are drawn from one forward pass (the same predictive distribution as TotoForecaster, which reruns the context per sample).",
+    "inputs": [
+     "actuals"
+    ],
+    "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+    "authors": [
+     "Konrad Waleszczyński"
+    ],
+    "ranked": true,
+    "mae": 514.4705981926563,
+    "rmse": 980.456479791234,
+    "nmae": 1.9076244157763478,
+    "bias": -111.69364532429944,
+    "pinball": 204.36385529190517,
+    "crps": 408.72771058381034,
+    "coverage80": 83.08219178082192,
+    "width80": 1304.2934913205884,
+    "rows": 175200,
+    "rows_expected": 175200,
+    "complete": true,
+    "by_lead_hour": {
+     "1": 396.24616054630366,
+     "2": 472.1929564267163,
+     "3": 532.7948020523385,
+     "4": 574.8451530160982,
+     "5": 596.2739189218252
+    },
+    "by_month": {
+     "2025-10": 452.6179325261777,
+     "2025-11": 323.7593137641144,
+     "2025-12": 172.89851409541305,
+     "2026-01": 299.2150650506461,
+     "2026-02": 436.97128088665914,
+     "2026-03": 496.4760500776288,
+     "2026-04": 720.7814735509237,
+     "2026-05": 656.5275171252177,
+     "2026-06": 719.4980701047771,
+     "2026-07": 703.2187452801448,
+     "2026-08": 597.5761719891948,
+     "2026-09": 598.3083870598348,
+     "2026-10": 1.0393900553385416
+    },
+    "ref_name": "pse_plan",
+    "skill": -0.5113814806206354,
+    "skill_ci": [
+     -0.6247520225542317,
+     -0.4088474450199911
+    ],
+    "ref_rows": 175200,
+    "rank": 8
+   },
+   {
     "id": "naive_day",
     "name": "Seasonal naive, day",
     "kind": "naive",
@@ -4045,7 +4464,7 @@
      -0.6205811585723633
     ],
     "ref_rows": 175200,
-    "rank": 8
+    "rank": 9
    },
    {
     "id": "naive_week",
@@ -4102,7 +4521,7 @@
      -1.220145732161831
     ],
     "ref_rows": 175200,
-    "rank": 9
+    "rank": 10
    },
    {
     "id": "persistence",
@@ -4159,7 +4578,7 @@
      -6.508574424241982
     ],
     "ref_rows": 175200,
-    "rank": 10
+    "rank": 11
    }
   ],
   "intraday/demand": [
@@ -4566,6 +4985,63 @@
     "rank": 7
    },
    {
+    "id": "toto",
+    "name": "Toto",
+    "kind": "foundation, zero-shot",
+    "as_of": true,
+    "reference": false,
+    "description": "Datadog/Toto-Open-Base-1.0 (Apache-2.0), zero-shot, univariate; median and deciles of 256 samples. The horizon fits in one output patch, so the samples are drawn from one forward pass (the same predictive distribution as TotoForecaster, which reruns the context per sample).",
+    "inputs": [
+     "actuals"
+    ],
+    "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+    "authors": [
+     "Konrad Waleszczyński"
+    ],
+    "ranked": true,
+    "mae": 601.9190122565728,
+    "rmse": 867.1972977297052,
+    "nmae": 3.2485675698486602,
+    "bias": 29.91748717925049,
+    "pinball": 237.92118834288837,
+    "crps": 475.84237668577674,
+    "coverage80": 77.97203196347033,
+    "width80": 1819.7979304232663,
+    "rows": 175200,
+    "rows_expected": 175200,
+    "complete": true,
+    "by_lead_hour": {
+     "1": 462.26239249852847,
+     "2": 537.4569255629726,
+     "3": 604.773592424283,
+     "4": 675.0040803539258,
+     "5": 730.0980704431543
+    },
+    "by_month": {
+     "2025-10": 574.7680322765751,
+     "2025-11": 668.318311577691,
+     "2025-12": 574.3335908617901,
+     "2026-01": 736.0488131016886,
+     "2026-02": 621.6596927600679,
+     "2026-03": 602.7230944250504,
+     "2026-04": 640.8951733691406,
+     "2026-05": 564.5591341623614,
+     "2026-06": 584.8876028814019,
+     "2026-07": 541.7131747878865,
+     "2026-08": 592.8847067325058,
+     "2026-09": 524.1418141970486,
+     "2026-10": 173.95901692708352
+    },
+    "ref_name": "pse_plan",
+    "skill": -0.4539204785754918,
+    "skill_ci": [
+     -0.5349594693878094,
+     -0.3741041192989051
+    ],
+    "ref_rows": 175200,
+    "rank": 8
+   },
+   {
     "id": "naive_week",
     "name": "Seasonal naive, week",
     "kind": "naive",
@@ -4620,7 +5096,7 @@
      -1.316387985895929
     ],
     "ref_rows": 175200,
-    "rank": 8
+    "rank": 9
    },
    {
     "id": "naive_day",
@@ -4677,7 +5153,7 @@
      -1.9666743058207217
     ],
     "ref_rows": 175200,
-    "rank": 9
+    "rank": 10
    },
    {
     "id": "persistence",
@@ -4734,7 +5210,7 @@
      -4.161903138984244
     ],
     "ref_rows": 175200,
-    "rank": 10
+    "rank": 11
    }
   ]
  }

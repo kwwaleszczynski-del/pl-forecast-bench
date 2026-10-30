@@ -4,7 +4,8 @@ Models (all Apache-2.0; licences checked on the model cards on 2026-10-28):
 - ``chronos_bolt``: amazon/chronos-bolt-small, univariate;
 - ``chronos2``: amazon/chronos-2, univariate and with NWP covariates (``chronos2_nwp``);
 - ``timesfm``: google/timesfm-2.5-200m-pytorch, univariate;
-- ``toto``: Datadog/Toto-Open-Base-1.0, univariate, quantiles from 100 samples.
+- ``toto``: Datadog/Toto-Open-Base-1.0, univariate, median and quantiles of 256 samples from one forward
+  pass (``Forecaster._toto_one_patch``).
 Not used: Moirai 1.x/2.0 (CC BY-NC 4.0, non-commercial) and TiRex (NXAI Community License, not an open licence).
 
 Context: the actual series up to the newest value public at the origin (read through the guarded ``Store``).
@@ -34,7 +35,7 @@ log = logging.getLogger(__name__)
 
 MODELS = ("chronos_bolt", "chronos2", "chronos2_nwp", "timesfm", "toto")
 CTX_ID = 2048
-TOTO_SAMPLES = 100
+TOTO_SAMPLES = 256
 CTX_DA_H = 1024
 NS_H = 4 * NS_QH
 COVARIATES = {"wind": ["wind_idx"], "pv": ["pv_idx", "cs_w"], "demand": ["t2m_pop", "pv_idx"],
@@ -141,7 +142,7 @@ class Forecaster:
     def predict(self, ctx: np.ndarray, horizon: int, step_ns: int, cov_past=None, cov_future=None,
                 batch: int | None = None) -> tuple[np.ndarray, np.ndarray]:
         # sized for a 6 GB card: larger batches spill into shared memory and run slower
-        batch = batch or {"toto": 16, "timesfm": 64}.get(self.name, 256)
+        batch = batch or {"toto": 64, "timesfm": 64}.get(self.name, 256)
         points, quants = [], []
         for i in range(0, len(ctx), batch):
             sl = slice(i, i + batch)
@@ -186,12 +187,42 @@ class Forecaster:
                                       time_interval_seconds=torch.full((n, 1), int(step_ns // 10**9), dtype=torch.int64,
                                                                        device=self.device))
             with torch.inference_mode():
-                fc = self.toto.forecast(inputs, prediction_length=horizon, num_samples=TOTO_SAMPLES,
-                                        samples_per_batch=TOTO_SAMPLES)
-            samples = fc.samples.squeeze(1).cpu().numpy()          # (batch, horizon, samples)
+                if horizon <= self.toto.model.patch_embed.patch_size:
+                    samples = self._toto_one_patch(inputs, horizon)
+                else:
+                    fc = self.toto.forecast(inputs, prediction_length=horizon, num_samples=TOTO_SAMPLES,
+                                            samples_per_batch=TOTO_SAMPLES)
+                    samples = fc.samples.squeeze(1).cpu().numpy()          # (batch, horizon, samples)
             q = np.quantile(samples, levels, axis=-1).transpose(1, 2, 0)
-            return samples.mean(-1), q
+            # the sample median: the predictive distribution is heavy-tailed, so the sample mean is unstable
+            return np.median(samples, axis=-1), q
         raise ValueError(self.name)
+
+    def _toto_one_patch(self, inputs, horizon: int) -> np.ndarray:
+        """Toto samples for a horizon within one output patch, from a single forward pass.
+
+        ``TotoForecaster.generate_samples`` repeats the context for every sample and runs the model once per sample;
+        when the horizon fits in one patch nothing is fed back, so all samples come from the same predictive
+        distribution and drawing them from one pass is the same procedure at a fraction of the cost.
+        """
+        import torch
+        from toto.data.util.dataset import pad_array, pad_id_mask, replace_extreme_values
+        model = self.toto.model
+        stride = model.patch_embed.stride
+        series = pad_array(inputs.series, stride)
+        padding = pad_array(inputs.padding_mask, stride)
+        id_mask = pad_id_mask(inputs.id_mask, stride)
+        base, loc, scale = model(inputs=series, input_padding_mask=padding, id_mask=id_mask, kv_cache=None,
+                                 scaling_prefix_length=series.shape[-1], num_exogenous_variables=0)
+        # keep only the next patch of the mixture of Student-t before sampling (the rest predicts the context)
+        p = model.patch_embed.patch_size
+        comp = base.component_distribution
+        base = torch.distributions.MixtureSameFamily(
+            torch.distributions.Categorical(probs=base.mixture_distribution.probs[..., -p:, :]),
+            type(comp)(comp.df[..., -p:, :], comp.loc[..., -p:, :], comp.scale[..., -p:, :]))
+        distr = self.toto.create_affine_transformed(base, loc, scale)
+        draws = replace_extreme_values(distr.sample(torch.Size([TOTO_SAMPLES])))    # (samples, batch, 1, p)
+        return draws[:, :, 0, :horizon].permute(1, 2, 0).float().cpu().numpy()       # (batch, horizon, samples)
 
 
 # --- running a task ---------------------------------------------------------------------------------------------------

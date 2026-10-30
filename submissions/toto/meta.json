@@ -1,0 +1,17 @@
+{
+ "name": "toto",
+ "display_name": "Toto",
+ "inputs": [
+  "actuals"
+ ],
+ "description": "Datadog/Toto-Open-Base-1.0 (Apache-2.0), zero-shot, univariate; median and deciles of 256 samples. The horizon fits in one output patch, so the samples are drawn from one forward pass (the same predictive distribution as TotoForecaster, which reruns the context per sample).",
+ "kind": "foundation, zero-shot",
+ "as_of": true,
+ "reference": false,
+ "probabilistic": true,
+ "code": "https://github.com/kwwaleszczynski-del/pl-forecast-bench/blob/main/src/plfb/baselines/foundation.py",
+ "authors": [
+  "Konrad Waleszczyński"
+ ],
+ "license": "MIT (code); model weights Apache-2.0"
+}
