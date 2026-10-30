@@ -1,6 +1,7 @@
 # pl-forecast-bench
 
 [![tests](https://github.com/kwwaleszczynski-del/pl-forecast-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/kwwaleszczynski-del/pl-forecast-bench/actions/workflows/ci.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23819139.svg)](https://doi.org/10.5281/zenodo.23819139)
 
 A **citable benchmark of forecasts for the Polish power system**: national wind generation, solar generation, power
 demand and the SDAC day-ahead price, **day-ahead** (issued on D-1 at 10:00, before the SDAC gate closure) and
@@ -259,11 +260,13 @@ This is an independent project, not affiliated with PSE S.A., ECMWF or Open-Mete
 
 ## Cite
 
-See [CITATION.cff](CITATION.cff); the archived release and its DOI are listed there once deposited on Zenodo.
+Please cite the benchmark through its Zenodo DOI, [10.5281/zenodo.23819139](https://doi.org/10.5281/zenodo.23819139)
+(all versions; each release also has its own DOI, e.g. 1.1.0:
+[10.5281/zenodo.23819140](https://doi.org/10.5281/zenodo.23819140)). See also [`CITATION.cff`](CITATION.cff).
 
 ```
 Waleszczyński, K. (2026). pl-forecast-bench: a leakage-checked forecasting benchmark for the Polish power system
-(version 1.1.0). https://github.com/kwwaleszczynski-del/pl-forecast-bench
+(version 1.1.0). Zenodo. https://doi.org/10.5281/zenodo.23819140
 ```
 
 ## Limitations
