@@ -7,7 +7,8 @@ the monthly job downloads about 13 months of weather (about 3,300 Open-Meteo uni
 Foundation models need a GPU and are not part of the live track.
 
 A month is scored from day ``LAG_DAYS`` of the next month on, when PSE has republished the actuals. Imbalance prices
-(CEN) can still be corrected for about 45 days, so the imbalance cost of the newest month is preliminary.
+(CEN) can still be republished up to about 120 days after the end of a month (the longest republication pse-opendata
+has observed for crb-rozl), so the imbalance cost of the last four months is preliminary.
 
 Usage:
     python -m plfb live                    # the latest month that can be scored

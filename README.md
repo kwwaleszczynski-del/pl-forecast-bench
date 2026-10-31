@@ -72,7 +72,9 @@ tasks, as-of rules and metrics, and adds the scores to `docs/live/` and to the s
 - the models are refitted once a month, at its first midnight, on the previous 12 months (a rolling window, so the
   job downloads about 13 months of weather, some 3,300 Open-Meteo units, instead of the whole history);
 - foundation models are not included (no GPU in the runner);
-- the imbalance cost of the newest month is preliminary, because PSE corrects imbalance prices for about 45 days.
+- the imbalance cost of the last four months is preliminary, because PSE republishes corrected imbalance prices
+  up to about 120 days after the end of a month (the longest republication pse-opendata has observed for
+  `crb-rozl`).
 
 Live months are therefore not part of v1 and not comparable one to one with the test-year leaderboard. The job runs
 on the 5th of each month for the previous month only when the repository variable `DASHBOARD_SCHEDULE` is `on` (it
